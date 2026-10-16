@@ -8,8 +8,8 @@ coverage, interference and dead zones. It also plans a network on paper before y
 
 > **Status: pre-release (0.1.0).** It is built and tested on Windows against one real adapter. Linux and macOS
 > scanning, real speed-test servers and the installer are implemented but **not yet verified on hardware**.
-> The honest list is in [docs/guide/11-limits.md](docs/guide/11-limits.md). No binary release exists yet, so you
-> build from source for now. **Testers with different hardware are the most valuable contribution right now.**
+> The honest list is in [docs/guide/11-limits.md](docs/guide/11-limits.md). Prebuilt binaries for Windows, Linux and macOS (Apple silicon) are on the
+> [Releases page](https://github.com/hanzlahabib/openspot/releases/latest); they are unsigned. **Testers with different hardware are the most valuable contribution right now.**
 
 ## Why OpenSpot
 
