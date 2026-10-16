@@ -1,0 +1,20 @@
+[package]
+name = "openspot-cli"
+description = "OpenSpot command-line Wi-Fi scanner"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "openspot"
+path = "src/main.rs"
+
+[dependencies]
+openspot-wlan.workspace = true
+serde_json.workspace = true
+clap.workspace = true
+thiserror.workspace = true
+
+[lints]
+workspace = true

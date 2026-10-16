@@ -1,0 +1,23 @@
+[package]
+name = "openspot-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "0.4"
+openspot-ie = { path = "../crates/openspot-ie" }
+
+# Own workspace root: the fuzz crate needs nightly and must never be built by
+# `cargo build --workspace`.
+[workspace]
+
+[[bin]]
+name = "parse_ies"
+path = "fuzz_targets/parse_ies.rs"
+test = false
+doc = false
+bench = false

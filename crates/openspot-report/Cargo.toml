@@ -1,0 +1,30 @@
+[package]
+name = "openspot-report"
+description = "PDF survey reports, per-AP heatmap export and project archives for OpenSpot"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+openspot-model.workspace = true
+openspot-wlan.workspace = true
+openspot-heatmap.workspace = true
+openspot-export.workspace = true
+openspot-store.workspace = true
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
+pdf-writer = "0.15"
+ttf-parser = "0.25"
+miniz_oxide = "0.8"
+unicode-normalization = "0.1"
+zip = { version = "9", default-features = false, features = ["deflate"] }
+sha2 = "0.10"
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+
+[dev-dependencies]
+lopdf = { version = "0.45", default-features = false }
+
+[lints]
+workspace = true

@@ -1,0 +1,16 @@
+[package]
+name = "openspot-i18n"
+description = "OpenSpot localization: Fluent catalogs, locale negotiation and a pseudo-locale"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+fluent-bundle = "0.16"
+unic-langid = "0.9"
+thiserror.workspace = true
+sys-locale = "0.3"
+
+[lints]
+workspace = true

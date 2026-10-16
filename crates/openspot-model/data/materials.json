@@ -1,0 +1,190 @@
+{
+  "version": 1,
+  "provenance": "Built only from public data: ITU-R P.2040-3 Table 3 material permittivity/conductivity coefficients (values read from the MathWorks buildingMaterialPermittivity reference page reproducing that table; the ITU PDF itself was not accessed). absorption_db is the one-way transmission loss and reflection the reflection magnitude of a single homogeneous slab at normal incidence (Balanis, Advanced Engineering Electromagnetics, multiple-reflection slab formula) evaluated at the band reference frequencies 2.45/5.5/6.5 GHz. Reference thicknesses are typical-construction ASSUMPTIONS, not measurements; they are adjustable by defining a custom material. A unit test recomputes every absorption/reflection value from the p2040 parameters.",
+  "materials": [
+    {
+      "id": "concrete-wall",
+      "name": "Concrete wall (20 cm)",
+      "category": "wall",
+      "reference_thickness_m": 0.2,
+      "p2040": {
+        "a": 5.24,
+        "b": 0.0,
+        "c": 0.0462,
+        "d": 0.7822
+      },
+      "absorption_db": {
+        "ghz2_4": 14.8,
+        "ghz5": 26.5,
+        "ghz6": 30.0
+      },
+      "reflection": {
+        "ghz2_4": 0.41,
+        "ghz5": 0.39,
+        "ghz6": 0.39
+      },
+      "source": "ITU-R P.2040-3 Table 3 (eps'=a*f^b, sigma=c*f^d, f in GHz), single homogeneous slab at normal incidence"
+    },
+    {
+      "id": "brick-wall",
+      "name": "Brick wall (10 cm)",
+      "category": "wall",
+      "reference_thickness_m": 0.1,
+      "p2040": {
+        "a": 3.91,
+        "b": 0.0,
+        "c": 0.0238,
+        "d": 0.16
+      },
+      "absorption_db": {
+        "ghz2_4": 3.3,
+        "ghz5": 3.6,
+        "ghz6": 4.1
+      },
+      "reflection": {
+        "ghz2_4": 0.36,
+        "ghz5": 0.38,
+        "ghz6": 0.47
+      },
+      "source": "ITU-R P.2040-3 Table 3 (eps'=a*f^b, sigma=c*f^d, f in GHz), single homogeneous slab at normal incidence"
+    },
+    {
+      "id": "drywall",
+      "name": "Plasterboard partition (2.5 cm)",
+      "category": "wall",
+      "reference_thickness_m": 0.025,
+      "p2040": {
+        "a": 2.73,
+        "b": 0.0,
+        "c": 0.0085,
+        "d": 0.9395
+      },
+      "absorption_db": {
+        "ghz2_4": 1.2,
+        "ghz5": 2.0,
+        "ghz6": 1.6
+      },
+      "reflection": {
+        "ghz2_4": 0.39,
+        "ghz5": 0.42,
+        "ghz6": 0.27
+      },
+      "source": "ITU-R P.2040-3 Table 3 (eps'=a*f^b, sigma=c*f^d, f in GHz), single homogeneous slab at normal incidence"
+    },
+    {
+      "id": "wood-door",
+      "name": "Solid wood door (4 cm)",
+      "category": "door",
+      "reference_thickness_m": 0.04,
+      "p2040": {
+        "a": 1.99,
+        "b": 0.0,
+        "c": 0.0047,
+        "d": 1.0718
+      },
+      "absorption_db": {
+        "ghz2_4": 0.6,
+        "ghz5": 1.5,
+        "ghz6": 2.0
+      },
+      "reflection": {
+        "ghz2_4": 0.08,
+        "ghz5": 0.08,
+        "ghz6": 0.28
+      },
+      "source": "ITU-R P.2040-3 Table 3 (eps'=a*f^b, sigma=c*f^d, f in GHz), single homogeneous slab at normal incidence"
+    },
+    {
+      "id": "glass-window",
+      "name": "Glass window (6 mm)",
+      "category": "window",
+      "reference_thickness_m": 0.006,
+      "p2040": {
+        "a": 6.31,
+        "b": 0.0,
+        "c": 0.0036,
+        "d": 1.3394
+      },
+      "absorption_db": {
+        "ghz2_4": 2.0,
+        "ghz5": 3.3,
+        "ghz6": 2.8
+      },
+      "reflection": {
+        "ghz2_4": 0.59,
+        "ghz5": 0.71,
+        "ghz6": 0.67
+      },
+      "source": "ITU-R P.2040-3 Table 3 (eps'=a*f^b, sigma=c*f^d, f in GHz), single homogeneous slab at normal incidence"
+    },
+    {
+      "id": "chipboard-shelf",
+      "name": "Chipboard shelving (4 cm)",
+      "category": "shelf",
+      "reference_thickness_m": 0.04,
+      "p2040": {
+        "a": 2.58,
+        "b": 0.0,
+        "c": 0.0217,
+        "d": 0.78
+      },
+      "absorption_db": {
+        "ghz2_4": 2.0,
+        "ghz5": 4.0,
+        "ghz6": 4.2
+      },
+      "reflection": {
+        "ghz2_4": 0.1,
+        "ghz5": 0.31,
+        "ghz6": 0.23
+      },
+      "source": "ITU-R P.2040-3 Table 3 (eps'=a*f^b, sigma=c*f^d, f in GHz), single homogeneous slab at normal incidence"
+    },
+    {
+      "id": "concrete-slab",
+      "name": "Concrete floor slab (20 cm)",
+      "category": "slab",
+      "reference_thickness_m": 0.2,
+      "p2040": {
+        "a": 5.24,
+        "b": 0.0,
+        "c": 0.0462,
+        "d": 0.7822
+      },
+      "absorption_db": {
+        "ghz2_4": 14.8,
+        "ghz5": 26.5,
+        "ghz6": 30.0
+      },
+      "reflection": {
+        "ghz2_4": 0.41,
+        "ghz5": 0.39,
+        "ghz6": 0.39
+      },
+      "source": "ITU-R P.2040-3 Table 3 (eps'=a*f^b, sigma=c*f^d, f in GHz), single homogeneous slab at normal incidence"
+    },
+    {
+      "id": "wood-floor",
+      "name": "Wood floor deck (4 cm)",
+      "category": "slab",
+      "reference_thickness_m": 0.04,
+      "p2040": {
+        "a": 1.99,
+        "b": 0.0,
+        "c": 0.0047,
+        "d": 1.0718
+      },
+      "absorption_db": {
+        "ghz2_4": 0.6,
+        "ghz5": 1.5,
+        "ghz6": 2.0
+      },
+      "reflection": {
+        "ghz2_4": 0.08,
+        "ghz5": 0.08,
+        "ghz6": 0.28
+      },
+      "source": "ITU-R P.2040-3 Table 3 (eps'=a*f^b, sigma=c*f^d, f in GHz), single homogeneous slab at normal incidence"
+    }
+  ]
+}

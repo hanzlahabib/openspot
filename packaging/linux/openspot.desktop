@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Application
+Name=OpenSpot
+GenericName=Wi-Fi analyzer
+Comment=Wi-Fi analyzer and site-survey tool
+Exec=openspot-gui
+Icon=openspot
+Terminal=false
+Categories=Network;Utility;
+Keywords=wifi;wireless;survey;heatmap;
+# No MimeType yet: the application does not open a project passed on the command line.

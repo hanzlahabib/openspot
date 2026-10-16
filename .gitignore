@@ -1,0 +1,3 @@
+/target
+# Third-party binaries and derived analysis: never published (see docs/CLEAN_ROOM.md)
+/analysis/

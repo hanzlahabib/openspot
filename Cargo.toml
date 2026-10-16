@@ -1,0 +1,41 @@
+[workspace]
+resolver = "3"
+members = ["crates/openspot-ie", "crates/openspot-wlan", "crates/openspot-cli", "crates/openspot-app",
+    "crates/openspot-model", "crates/openspot-store", "crates/openspot-heatmap",
+    "crates/openspot-export", "crates/openspot-predict", "crates/openspot-speedtest", "crates/openspot-report", "crates/openspot-i18n"]
+
+[workspace.package]
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.88"
+license = "MIT OR Apache-2.0"
+repository = "https://github.com/hanzlahabib/openspot"
+homepage = "https://github.com/hanzlahabib/openspot"
+keywords = ["wifi", "wlan", "802-11", "site-survey", "heatmap"]
+categories = ["network-programming", "visualization", "command-line-utilities"]
+
+[workspace.dependencies]
+openspot-ie = { path = "crates/openspot-ie" }
+openspot-wlan = { path = "crates/openspot-wlan" }
+openspot-model = { path = "crates/openspot-model" }
+openspot-store = { path = "crates/openspot-store" }
+openspot-heatmap = { path = "crates/openspot-heatmap" }
+openspot-export = { path = "crates/openspot-export" }
+openspot-predict = { path = "crates/openspot-predict" }
+openspot-speedtest = { path = "crates/openspot-speedtest" }
+openspot-report = { path = "crates/openspot-report" }
+openspot-i18n = { path = "crates/openspot-i18n" }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+thiserror = "2"
+clap = { version = "4", features = ["derive"] }
+windows = "0.62"
+proptest = "1"
+criterion = { version = "0.7", default-features = false, features = ["cargo_bench_support"] }
+
+[workspace.lints.rust]
+unsafe_op_in_unsafe_fn = "deny"
+missing_debug_implementations = "warn"
+
+[workspace.lints.clippy]
+all = { level = "warn", priority = -1 }

@@ -1,0 +1,26 @@
+[package]
+name = "openspot-wlan"
+description = "Cross-platform Wi-Fi scanning behind a provider trait (Windows WLAN API backend + fake for tests)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+openspot-ie.workspace = true
+serde.workspace = true
+thiserror.workspace = true
+
+[target.'cfg(windows)'.dependencies]
+windows = { workspace = true, features = ["Win32_Foundation", "Win32_NetworkManagement_Ndis", "Win32_NetworkManagement_WiFi"] }
+
+[target.'cfg(target_os = "linux")'.dependencies]
+neli = "0.7"
+
+[target.'cfg(target_os = "macos")'.dependencies]
+objc2 = "0.6"
+objc2-foundation = { version = "0.3", default-features = false, features = ["std", "NSArray", "NSEnumerator", "NSObject", "NSData", "NSError", "NSSet", "NSString"] }
+objc2-core-wlan = { version = "0.3", default-features = false, features = ["std", "CWInterface", "CWNetwork", "CWChannel", "CWWiFiClient", "CoreWLANTypes"] }
+
+[lints]
+workspace = true

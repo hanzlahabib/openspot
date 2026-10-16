@@ -1,0 +1,21 @@
+[package]
+name = "openspot-predict"
+description = "Deterministic indoor Wi-Fi propagation prediction (multi-wall model) for OpenSpot planning"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[features]
+default = ["parallel"]
+# Compute grid rows on the rayon thread pool; results are identical to the serial path.
+parallel = ["dep:rayon"]
+
+[dependencies]
+openspot-model.workspace = true
+openspot-heatmap.workspace = true
+rayon = { version = "1", optional = true }
+thiserror.workspace = true
+
+[lints]
+workspace = true

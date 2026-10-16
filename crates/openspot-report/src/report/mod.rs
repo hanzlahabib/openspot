@@ -1,0 +1,150 @@
+//! PDF survey reports (R-03 quick, R-04 advanced).
+
+mod builder;
+pub(crate) mod heatmap;
+mod networks;
+mod summary;
+
+pub use networks::{NetworkRow, network_rows};
+
+use std::collections::BTreeMap;
+
+use openspot_model::{Project, Snapshot, Zone};
+use openspot_wlan::MacAddress;
+
+use crate::branding::ReportBranding;
+use crate::error::ReportError;
+use crate::options::ReportOptions;
+use crate::pdf::Metadata;
+use builder::{Builder, MUTED};
+use heatmap::HeatmapPage;
+
+/// Everything a report is made from, apart from the options.
+#[derive(Debug, Clone, Copy)]
+pub struct ReportData<'a> {
+    pub project: &'a Project,
+    /// User-chosen names for access points.
+    pub aliases: &'a BTreeMap<MacAddress, String>,
+    pub branding: &'a ReportBranding,
+    /// Encoded PNG/JPEG logo (see [`ReportBranding::load_logo`]).
+    pub logo: Option<&'a [u8]>,
+}
+
+/// Progress reporting and cancellation, called from the generating thread.
+pub trait Observer {
+    /// Polled between pages; returning true aborts with [`ReportError::Cancelled`].
+    fn is_cancelled(&self) -> bool {
+        false
+    }
+
+    /// `done` of `total` steps finished; `step` says what is being worked on.
+    fn progress(&self, _done: usize, _total: usize, _step: &str) {}
+}
+
+/// Observer that never cancels and ignores progress.
+#[derive(Debug, Clone, Copy, Default)]
+pub struct NoObserver;
+
+impl Observer for NoObserver {}
+
+/// The zones and snapshots a report covers, resolved against the options.
+#[derive(Debug)]
+pub(crate) struct Plan<'a> {
+    pub zones: Vec<PlanZone<'a>>,
+}
+
+#[derive(Debug)]
+pub(crate) struct PlanZone<'a> {
+    pub index: usize,
+    pub zone: &'a Zone,
+    /// `(index in the zone, snapshot)`.
+    pub snapshots: Vec<(usize, &'a Snapshot)>,
+}
+
+impl<'a> Plan<'a> {
+    pub fn new(project: &'a Project, opts: &ReportOptions) -> Self {
+        let zones = project
+            .zones
+            .iter()
+            .enumerate()
+            .filter(|(_, z)| opts.includes_zone(z))
+            .filter_map(|(index, zone)| {
+                let snapshots: Vec<_> = zone.snapshots.iter().enumerate().filter(|(_, s)| opts.includes_snapshot(&s.id)).collect();
+                // A zone whose snapshots were all deselected contributes nothing.
+                (!snapshots.is_empty()).then_some(PlanZone { index, zone, snapshots })
+            })
+            .collect();
+        Self { zones }
+    }
+
+    fn heatmap_count(&self, visualizations: usize) -> usize {
+        self.zones.iter().map(|z| z.snapshots.len()).sum::<usize>() * visualizations
+    }
+}
+
+fn check(observer: &dyn Observer) -> Result<(), ReportError> {
+    if observer.is_cancelled() { Err(ReportError::Cancelled) } else { Ok(()) }
+}
+
+/// Builds the PDF in memory. Identical inputs (including `options.generated_at`) give
+/// identical bytes.
+pub fn generate_pdf(data: &ReportData<'_>, options: &ReportOptions, observer: &dyn Observer) -> Result<Vec<u8>, ReportError> {
+    let opts = options.resolved();
+    let plan = Plan::new(data.project, &opts);
+    let visualizations = opts.sorted_visualizations();
+    let heatmaps = plan.heatmap_count(visualizations.len());
+    let total = usize::from(opts.sections.cover) + usize::from(opts.sections.summary) + heatmaps;
+    let mut done = 0;
+
+    let title = if opts.titles.title.trim().is_empty() { summary::DEFAULT_TITLE } else { opts.titles.title.trim() };
+    let mut b = Builder::new(title, &data.project.name)?;
+
+    check(observer)?;
+    if opts.sections.cover {
+        observer.progress(done, total, "Cover page");
+        summary::cover(&mut b, &plan, &data.project.name, data.branding, data.logo, &opts)?;
+        b.set_footer_from(1);
+        done += 1;
+    }
+    if opts.sections.summary {
+        check(observer)?;
+        observer.progress(done, total, "Summary");
+        summary::summary(&mut b, &plan, data.aliases, &opts, visualizations.len());
+        done += 1;
+    }
+    for pz in &plan.zones {
+        for &(snapshot_index, snapshot) in &pz.snapshots {
+            for &viz in &visualizations {
+                check(observer)?;
+                observer.progress(done, total, &format!("{} - {} - {}", pz.zone.name, snapshot.name, viz.title()));
+                let page = HeatmapPage { zone_index: pz.index, zone: pz.zone, snapshot_index, snapshot, viz };
+                heatmap::heatmap_page(&mut b, page, &opts, data.aliases)?;
+                done += 1;
+            }
+        }
+    }
+    if b.is_empty() {
+        // Every section was switched off: still emit a valid, self-explanatory document.
+        b.start_page();
+        b.heading("Empty report", 16.0);
+        b.paragraph("No cover, summary or heatmap sections were selected for this report.", 10.0, MUTED);
+    }
+    observer.progress(total, total, "Writing PDF");
+
+    let author = if data.branding.company.trim().is_empty() { "OpenSpot" } else { data.branding.company.trim() };
+    let producer = format!("OpenSpot openspot-report {}", env!("CARGO_PKG_VERSION"));
+    let footer = format!("Generated by OpenSpot on {}", crate::timefmt::iso_date(opts.generated_at));
+    let doc = b.finish_pages(&footer);
+    Ok(doc.finish(&Metadata {
+        title,
+        author,
+        subject: &data.project.name,
+        keywords: "Wi-Fi, site survey, heatmap",
+        creator: "OpenSpot",
+        producer: &producer,
+        created_unix: opts.generated_at,
+    }))
+}
+
+#[cfg(test)]
+mod tests;

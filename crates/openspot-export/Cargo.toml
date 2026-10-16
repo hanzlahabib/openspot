@@ -1,0 +1,22 @@
+[package]
+name = "openspot-export"
+description = "CSV and PNG export for OpenSpot surveys"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[dependencies]
+openspot-model.workspace = true
+openspot-wlan.workspace = true
+openspot-heatmap.workspace = true
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
+thiserror.workspace = true
+
+[lints]
+workspace = true
+
+# Renders the user-guide pictures; `test = true` so its determinism test runs with the workspace.
+[[example]]
+name = "guide_images"
+test = true

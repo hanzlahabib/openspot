@@ -1,0 +1,43 @@
+[package]
+name = "openspot-app"
+description = "OpenSpot desktop app (Inspector mode)"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "openspot-gui"
+path = "src/main.rs"
+
+[dependencies]
+openspot-wlan.workspace = true
+openspot-model.workspace = true
+openspot-store.workspace = true
+openspot-heatmap.workspace = true
+openspot-export.workspace = true
+openspot-speedtest.workspace = true
+openspot-report.workspace = true
+openspot-i18n.workspace = true
+openspot-predict.workspace = true
+eframe = "0.33"
+egui_extras = "0.33"
+egui_plot = "0.34.1"
+image = { version = "0.25", default-features = false, features = ["png", "jpeg"] }
+rfd = "0.15"
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+dirs = "6"
+tiny-skia = "0.11"
+ab_glyph = "0.2"
+hayro = "=0.5.0"
+# Update check only: HTTPS via rustls, no OpenSSL.
+ureq = "3"
+
+[target.'cfg(windows)'.dependencies]
+# Only Windows has an audio backend wired up; on Linux cpal would need ALSA headers at build time.
+rodio = { version = "0.23", default-features = false, features = ["playback"] }
+
+[lints]
+workspace = true
